@@ -47,7 +47,10 @@ app.get('/', (req, res, next) => {
 
 // a função static leva o nome da pasta onde os static files estão, por isso, public
 app.use(express.static('public'))
-
+app.use(express.urlencoded({ extended: true})) //  this allows us to access information coming from forms
+// essa linha faz a função em users.js router.post('/', (req, res) => { funcionar completamente, inclusive o console.log
+app.use(express.json()) // this allows you to parse JSON information from the body - verificar
+// para habilitar que o servidor leia e receba informações JSON de forma apropriada, linha acima necessária 
 
 //possíveis opções de rotas
 app.post('/post')

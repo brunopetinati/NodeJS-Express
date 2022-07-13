@@ -5,21 +5,49 @@ const router = express.Router() // router funciona exatamente como app
 
 router.get('/', (req, res) => {
   res.send('users/new', { firstName: 'apague aqui para não preencher o input automaticamente' })
+  // está renderizando form que está dentro da pasta users/new.ejs. para acessar essa rota basta localhost:3000/users/new
+})
+
+router.get('/tenteaqui', (req, res) => {
+  // faça uma requisição para esse endereço enviando um parâmetro, como por exemplo
+  // tenteaqui?name=Kyle
+  console.log('aqui está o req.query.name', req.query.name)
+  res.send('renderizou aqui. cheque o console da linha de cima')
+  // está renderizando form que está dentro da pasta users/new.ejs. para acessar essa rota basta localhost:3000/users/new
 })
 
 router.get('/new', (req, res) => {
-  res.send('User New Form')
+  res.render('users/new', { firstName: req.body.firstName })
 })
 
 router.post('/', (req, res) => {
+  const isValid = true
+  // alterar essa variável para false e fazer requisição post em /users/new para
+  // recarregar a página com o form e inserir automaticamente o que tinha sido feito pela variável abaixo 
+  // em else
+  
+  if (isValid) {
+    users.push({ firstName: req.body.firstName })
+    res.redirect(`/users/${users.length - 1}`)
+  } else {
+    console.log('error')
+    res.render('users/new', { firstName: req.body.firstName })
+    // aqui acabamos de setar o valor que ficará no input caso caia em else. lá em new.ejs
+    // value= <%= locals.firstName %> recebe o valor dessa variável
+  }
+
   // Express does not allow us to access the body. We need to use middleware to do that for us. 
   console.log(req.body.firstName)
+  // pelo nome do input, localizamos, mas como diz no comentário acima, o Express não tem acesso ao body
+  // para a linha 17 acima funcionar no momento que clicarmos em um submit no input do form em views/users/new.ejs, seria
+  // necessário colocar em server.js a seguinte linha:
+  //app.use(express.urlenconded({ extended: true}))
   res.send('em views/users/new, ao clicar em submit, isso é renderizado')
-  // pelo nome do input, localizamos
 })
 
 // parâmetro dinâmico sinalizado com :
 router.get('/:id', (req, res) => {
+  console.log(req.user)
   res.send(`Get user with ID ${req.params.id}`)
 })
 
